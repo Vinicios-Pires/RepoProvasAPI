@@ -1,8 +1,9 @@
+import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 import * as authRepository from "./../repositories/authRepository.js";
 
-import { User } from "@prisma/client";
+import { prisma, User } from "@prisma/client";
 export type userData = Omit<User, "id">;
 
 export async function signup(userData: userData) {
@@ -18,4 +19,25 @@ export async function signup(userData: userData) {
 	await authRepository.createUser(userData, hashedPassword); // caso de sucesso na criacao
 }
 
-export async function signin(userData: userData) {}
+export async function signin(userData: userData) {
+	if (!userData) throw { type: "unprocessable_entity" };
+
+	const user = await authRepository.findUserByEmail(userData.email);
+
+	if (!user || !bcrypt.compareSync(userData.password, user.password)) {
+		throw { type: "unauthorized" };
+	}
+
+	const token = jwt.sign(
+		{
+			id: user.id,
+		},
+		process.env.JWT_SECRET
+	);
+
+	return token;
+}
+
+export async function verifytoken(token: any) {
+	return jwt.verify(token, process.env.JWT_SECRET);
+}
