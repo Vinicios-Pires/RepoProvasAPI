@@ -10,6 +10,9 @@
 		"dev": "ts-node src/server.ts",
 		"test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest -i"
 	},
+	"prisma": {
+		"seed": "ts-node prisma/seed.ts"
+	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
