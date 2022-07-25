@@ -6,7 +6,7 @@
 	"main": "index.js",
 	"scripts": {
 		"build": "tsc src/server.ts",
-		"start": "node dist/server.js",
+		"start": "node dist/src/server.js",
 		"dev": "ts-node src/server.ts",
 		"test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest -i"
 	},
