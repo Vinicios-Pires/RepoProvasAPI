@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import { validateSchemaMiddleware } from "../middlewares/validateSchema.js";
-import { signUpSchema } from "../schemas/authSchema.js";
+import { signInSchema, signUpSchema } from "../schemas/authSchema.js";
 
 import * as authController from "./../controllers/authController.js";
 
@@ -13,6 +13,10 @@ authRouter.post(
 	authController.signup
 );
 
-authRouter.post("/signin", authController.signin);
+authRouter.post(
+	"/signin",
+	validateSchemaMiddleware(signInSchema),
+	authController.signin
+);
 
 export default authRouter;
