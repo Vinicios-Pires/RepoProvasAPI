@@ -30,7 +30,7 @@ $ npm run dev
     "password": "somepassword"
     }
 
-# Rota de tests:
+# Rota de provas:
 
 - POST /test
   - Rota para o usuário criar um registro de prova
