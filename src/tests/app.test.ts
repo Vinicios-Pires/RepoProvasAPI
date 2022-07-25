@@ -6,12 +6,17 @@ beforeEach(async () => {
 	await prisma.$executeRaw`TRUNCATE TABLE users;`;
 });
 
+const authBody = {
+	email: "user@user.com",
+	password: "user",
+};
+
 describe("post /signup", () => {
 	it("given a valid req.body it should return 201", async () => {
 		const body = {
-			email: "user@user.com",
-			password: "user",
-			confirmPassword: "user",
+			email: authBody.email,
+			password: authBody.password,
+			confirmPassword: authBody.password,
 		};
 
 		const result = await supertest(app).post("/signup").send(body);
@@ -29,9 +34,9 @@ describe("post /signup", () => {
 
 	it("given an email already in use and password it should return 409", async () => {
 		const body = {
-			email: "user@user.com",
-			password: "user",
-			confirmPassword: "user",
+			email: authBody.email,
+			password: authBody.password,
+			confirmPassword: authBody.password,
 		};
 
 		await supertest(app).post("/signup").send(body);
@@ -61,14 +66,14 @@ describe("post /signup", () => {
 describe("post /signin", () => {
 	it("given a valid req.body it should return a token", async () => {
 		const signUpBody = {
-			email: "user@user.com",
-			password: "user",
-			confirmPassword: "user",
+			email: authBody.email,
+			password: authBody.password,
+			confirmPassword: authBody.password,
 		};
 
 		const signInBody = {
-			email: "user@user.com",
-			password: "user",
+			email: authBody.email,
+			password: authBody.password,
 		};
 
 		await supertest(app).post("/signup").send(signUpBody);
@@ -86,8 +91,8 @@ describe("post /signin", () => {
 
 	it("given an email not yet registered should return status 401", async () => {
 		const signInBody = {
-			email: "user@user.com",
-			password: "user",
+			email: authBody.email,
+			password: authBody.password,
 		};
 
 		const result = await supertest(app).post("/signin").send(signInBody);
