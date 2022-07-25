@@ -58,6 +58,53 @@ describe("post /signup", () => {
 	});
 });
 
+describe("post /signin", () => {
+	it("given a valid req.body it should return a token", async () => {
+		const signUpBody = {
+			email: "user@user.com",
+			password: "user",
+			confirmPassword: "user",
+		};
+
+		const signInBody = {
+			email: "user@user.com",
+			password: "user",
+		};
+
+		await supertest(app).post("/signup").send(signUpBody);
+		const userCreated = await prisma.user.findFirst({
+			where: {
+				email: signUpBody.email,
+			},
+		});
+		expect(userCreated).not.toBeNull();
+
+		const result = await supertest(app).post("/signin").send(signInBody);
+		const status = result.status;
+		expect(status).toEqual(200);
+	});
+
+	it("given an email not yet registered should return status 401", async () => {
+		const signInBody = {
+			email: "user@user.com",
+			password: "user",
+		};
+
+		const result = await supertest(app).post("/signin").send(signInBody);
+		const status = result.status;
+		expect(status).toEqual(401);
+	});
+
+	it("given a invalid req.body it should return 422", async () => {
+		const body = {};
+
+		const result = await supertest(app).post("/signup").send(body);
+		const status = result.status;
+
+		expect(status).toEqual(422);
+	});
+});
+
 afterAll(async () => {
 	await prisma.$disconnect();
 });
