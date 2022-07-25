@@ -3,6 +3,7 @@ export default {
 	preset: "ts-jest",
 	testEnvironment: "node",
 	extensionsToTreatAsEsm: [".ts"],
+	transform: {},
 	globals: {
 		"ts-jest": {
 			useESM: true,

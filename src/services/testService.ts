@@ -13,11 +13,15 @@ export async function createTest(test: createTestData) {
 export async function findTestsByDisciplines() {
 	const tests = await testRepository.findTestsByDisciplines();
 
+	if (!tests) throw { type: "not_found" };
+
 	return tests;
 }
 
 export async function findTestsByTeachers() {
 	const tests = await testRepository.findTestsByTeachers();
+
+	if (!tests) throw { type: "not_found" };
 
 	return tests;
 }
